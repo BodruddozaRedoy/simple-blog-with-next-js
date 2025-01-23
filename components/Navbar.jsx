@@ -1,23 +1,25 @@
 import React from "react";
-import {
-  RegisterLink,
-  LoginLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { LogoutLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import NavbarClient from "./NavbarClient";
 
 const Navbar = async () => {
   const { isAuthenticated } = getKindeServerSession();
   const isUserAuthenticated = await isAuthenticated();
-  console.log(isUserAuthenticated);
 
   return (
     <div className="flex justify-between items-center bg-slate-200 text-black px-10 py-5">
       <div>Simple Blog</div>
       <div className="flex gap-3 items-center list-none">
         <Link href={"/"}>Home</Link>
-        <Link href={"/profile"}>Profile</Link>
+        {
+          isUserAuthenticated ? (
+            <Link href={'/profile'}>Profile</Link>
+          ):(
+            <LoginLink>Profile</LoginLink>
+          )
+        }
       </div>
       <div>
         {isUserAuthenticated ? (
